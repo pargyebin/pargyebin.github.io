@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>자리 자동 배치</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 120px);
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .seat {
+      background: white;
+      border-radius: 12px;
+      padding: 25px 10px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #3730a3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 자리 자동 배치</h1>
+
+  <button onclick="shuffleSeats()">자리 섞기</button>
+
+  <div class="container" id="seatContainer"></div>
+
+  <script>
+    const container = document.getElementById("seatContainer");
+
+    function shuffleSeats() {
+      let numbers = [];
+
+      for (let i = 1; i <= 18; i++) {
+        numbers.push(i);
+      }
+
+      // 랜덤 섞기
+      numbers.sort(() => Math.random() - 0.5);
+
+      // 화면 초기화
+      container.innerHTML = "";
+
+      // 자리 생성
+      numbers.forEach(num => {
+        const seat = document.createElement("div");
+        seat.className = "seat";
+        seat.textContent = num;
+        container.appendChild(seat);
+      });
+    }
+
+    // 처음 실행 시 자동 배치
+    shuffleSeats();
+  </script>
+
+</body>
+</html>
