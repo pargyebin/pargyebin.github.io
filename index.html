@@ -17,12 +17,40 @@
       margin-bottom: 20px;
     }
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(3, 120px);
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-bottom: 30px;
+    }
+
+    button:hover {
+      background: #3730a3;
+    }
+
+    .classroom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       gap: 15px;
-      justify-content: center;
-      margin-top: 30px;
+    }
+
+    .row {
+      display: grid;
+      gap: 15px;
+    }
+
+    .row-2 {
+      grid-template-columns: repeat(2, 100px);
+    }
+
+    .row-4 {
+      grid-template-columns: repeat(4, 100px);
     }
 
     .seat {
@@ -33,21 +61,6 @@
       font-weight: bold;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
-    button {
-      padding: 12px 24px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #4f46e5;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #3730a3;
-    }
   </style>
 </head>
 <body>
@@ -56,10 +69,17 @@
 
   <button onclick="shuffleSeats()">자리 섞기</button>
 
-  <div class="container" id="seatContainer"></div>
+  <div class="classroom" id="classroom"></div>
 
   <script>
-    const container = document.getElementById("seatContainer");
+    const classroom = document.getElementById("classroom");
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
 
     function shuffleSeats() {
       let numbers = [];
@@ -68,22 +88,31 @@
         numbers.push(i);
       }
 
-      // 랜덤 섞기
-      numbers.sort(() => Math.random() - 0.5);
+      shuffle(numbers);
 
-      // 화면 초기화
-      container.innerHTML = "";
+      classroom.innerHTML = "";
 
-      // 자리 생성
-      numbers.forEach(num => {
-        const seat = document.createElement("div");
-        seat.className = "seat";
-        seat.textContent = num;
-        container.appendChild(seat);
+      // 자리 구조
+      const layout = [2, 4, 4, 4, 4];
+
+      let index = 0;
+
+      layout.forEach(count => {
+        const row = document.createElement("div");
+        row.className = count === 2 ? "row row-2" : "row row-4";
+
+        for (let i = 0; i < count; i++) {
+          const seat = document.createElement("div");
+          seat.className = "seat";
+          seat.textContent = numbers[index++];
+          row.appendChild(seat);
+        }
+
+        classroom.appendChild(row);
       });
     }
 
-    // 처음 실행 시 자동 배치
+    // 처음 실행
     shuffleSeats();
   </script>
 
